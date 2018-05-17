@@ -81,7 +81,7 @@ NoticeInfoDlg.addSubmit = function () {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/notice/add", function (data) {
-        Feng.success("添加成功!");
+        Feng.success("添加11成功!"+Feng.ctxPath);
         window.parent.Notice.table.refresh();
         NoticeInfoDlg.close();
     }, function (data) {
@@ -102,7 +102,6 @@ NoticeInfoDlg.editSubmit = function () {
     if (!this.validate()) {
         return;
     }
-
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/notice/update", function (data) {
         Feng.success("修改成功!");

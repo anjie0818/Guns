@@ -124,7 +124,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registration.addUrlPatterns("/*");
         return registration;
     }
-
     /**
      * RequestContextListener注册
      */

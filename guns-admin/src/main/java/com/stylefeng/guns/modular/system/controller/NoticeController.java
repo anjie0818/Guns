@@ -92,7 +92,7 @@ public class NoticeController extends BaseController {
     @RequestMapping(value = "/add")
     @ResponseBody
     @BussinessLog(value = "新增通知",key = "title",dict = NoticeMap.class)
-    public Object add(Notice notice) {
+        public Object add(Notice notice) {
         if (ToolUtil.isOneEmpty(notice, notice.getTitle(), notice.getContent())) {
             throw new GunsException(BizExceptionEnum.REQUEST_NULL);
         }
