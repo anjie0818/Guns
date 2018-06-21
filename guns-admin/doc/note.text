@@ -1,0 +1,82 @@
+一：spring VS spring boot
+    1、简化配置和依赖
+    2、创建项目的方法：
+        old:maven工程--web.xml--spring mvc 配置--业务--部署tomcat
+        new：创建springboot程序
+             1>利用start.spring.io创建
+             2>利用idea创建
+二：spring boot 核心
+    1、自动配置：
+        当程序启动时决定用哪个配置，不用哪个配置
+        Spring-boot-autoconfigure包介绍
+        条件化注解详解
+            @ConditionalOnBean 配置了某个特定bean
+            @ConditionalOnMissingBean 没有配置特定bean
+            @ConditionalOnClass classpath中有指定类
+            @ConditionalOnMissingClass classpath中没有指定类
+            @ConditionalOnProperty 给定配置属性中包含某个值
+            @ConditionalOnResource classpath有指定资源
+            @ConditionalOnWebApplication 是一个web应用程序
+            @ConditionalOnNotWebApplication 不是一个web应用程序
+    2、起步依赖
+            本质是一个maven的pom，定义了对其他库的传递依赖
+            不会产生版本冲突
+            覆盖起步依赖引入的传递依赖
+            eg:
+                        <exclusions>
+                            <exclusion>
+                                <groupId>com.fasterxml.jackson.core</groupId>
+                                <artifactId>jackson-databind</artifactId>
+                            </exclusion>
+                        </exclusions>
+三：spring boot 实战
+    1、覆盖默认配置
+    2、prifile的使用
+      什么是spring profile：针对不同环境，spring自动应用不同的配置
+      如何使用：两种方式
+      1.通过yml中通过---分割
+      2.通过多个形如application-{profile}.yml文件配置
+    3、定制错误页面
+        1.准备错误页面的html
+        2.配置实现了spring的view接口的bean 其id为error
+四：spring 多数据源
+        准备两个数据库（biz和guns）
+        建立两个表，两个表名都叫test
+        配置的步骤：
+        1.准备好两个DataSource
+        2.拓展一个AbstractRoutingDataSource并重写determineCurrentLookupKey方法（ DynamicDataSource 类）
+        3.配置这个拓展类到spring容器
+        4.编写多数据源切换的AOP
+        在需要切换数据源的service层加上注解@DataSource（name=“xxx”）即可
+五：Map+warpper详细介绍
+        概念：map+warpper方式即把controller层的返回结果转化成map，利用Warpper类做一次包装，使得返回给前端的结果更加显示灵活（显示数据灵活，维护灵活）。
+        原理： BaseControllerWarpper类
+        使用方法：继承BaseControllerWarpper类，编写自己的warpper类（以guns为例，介绍开发中的用途）
+        User(id,name,sex)
+        Map(id,name,sex,sexName,email,birthday) map.put(“email”,xxx)
+        [注意] 若controller中返回对象不是：list<map<string,object>>、map<string,object>,此时可以将对象包装BeanKit.beanToMap
+        ConstantFactory.me()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

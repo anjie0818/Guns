@@ -14,7 +14,7 @@ var Menu = {
 Menu.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
-        {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
+        {title: 'id', field: 'showid', visible: false, align: 'center', valign: 'middle'},
         {title: '菜单名称', field: 'name', align: 'center', valign: 'middle', sortable: true, width: '17%'},
         {title: '菜单编号', field: 'code', align: 'center', valign: 'middle', sortable: true, width: '12%'},
         {title: '菜单父编号', field: 'pcode', align: 'center', valign: 'middle', sortable: true},

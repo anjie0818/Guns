@@ -24,6 +24,7 @@ public class GunsProperties {
 
     private Boolean swaggerOpen = false;
 
+
     private String fileUploadPath;
 
     private Boolean haveCreatePath = false;

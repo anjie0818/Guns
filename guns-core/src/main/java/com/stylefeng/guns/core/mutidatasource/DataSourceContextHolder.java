@@ -7,7 +7,7 @@ package com.stylefeng.guns.core.mutidatasource;
  * @date 2017年3月5日 上午9:10:58
  */
 public class DataSourceContextHolder {
-
+//即做到了线程安全，又在线程范围内提供了数据共享的能力。本质就是一个内部的静态map
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();
 
     /**

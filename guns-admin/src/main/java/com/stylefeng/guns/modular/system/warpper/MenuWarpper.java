@@ -21,8 +21,18 @@ public class MenuWarpper extends BaseControllerWarpper {
 
     @Override
     public void warpTheMap(Map<String, Object> map) {
+        //包装ID过长的数据：超14位
+        String old = map.get("id").toString();
+            if (old.length()>14){
+                String star=old.substring(0,5);
+                String end=old.substring(old.length()-4,old.length());
+                old=star+"....."+end;
+
+            }
+        map.put("showid",old);
         map.put("statusName", ConstantFactory.me().getMenuStatusName((Integer) map.get("status")));
         map.put("isMenuName", IsMenu.valueOf((Integer) map.get("ismenu")));
+
     }
 
 }
