@@ -56,6 +56,13 @@
         Map(id,name,sex,sexName,email,birthday) map.put(“email”,xxx)
         [注意] 若controller中返回对象不是：list<map<string,object>>、map<string,object>,此时可以将对象包装BeanKit.beanToMap
         ConstantFactory.me()
+六：日志系统
+        功能:记录异常日志和业务日志(增加，修改，删除了哪些数据)
+        用法: @BussinessLog注解的使用
+              字典的介绍
+              修改需要将原字段保存起来
+        原理:AOP,通过LogAop类
+
 
 
 

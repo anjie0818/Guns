@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * 日志记录
+ * 日志记录拦截器
  *
  * @author fengshuonan
  * @date 2016年12月6日 下午8:48:30

@@ -22,7 +22,7 @@ public @interface BussinessLog {
     String value() default "";
 
     /**
-     * 被修改的实体的唯一标识,例如:菜单实体的唯一标识为"id"
+     * 被修改的实体的唯一标识,例如:菜单实体的唯一标识为"id"；可以是多个字段用“，”分割
      */
     String key() default "id";
 
