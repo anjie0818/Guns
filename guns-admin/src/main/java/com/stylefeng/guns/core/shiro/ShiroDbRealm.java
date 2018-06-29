@@ -16,6 +16,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 自定义的拦截器需要继承AuthorizingRealm并实现登录验证和赋予角色权限的两个方法
+ * 目的：shiro和数据库进行交互
+ */
 public class ShiroDbRealm extends AuthorizingRealm {
 
     /**
@@ -24,8 +28,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken)
             throws AuthenticationException {
-        IShiro shiroFactory = ShiroFactroy.me();
+        IShiro shiroFactory = ShiroFactroy.me();//读取数据库的方法
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+        //将前台username在数据库查出对应用户
         User user = shiroFactory.user(token.getUsername());
         ShiroUser shiroUser = shiroFactory.shiroUser(user);
         SimpleAuthenticationInfo info = shiroFactory.info(shiroUser, user, super.getName());
@@ -38,7 +43,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         IShiro shiroFactory = ShiroFactroy.me();
+        //PrincipalCollection是一个身份集合
         ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
+        //登录认证的时候会将角色集合传给shiro
         List<Integer> roleList = shiroUser.getRoleList();
 
         Set<String> permissionSet = new HashSet<>();

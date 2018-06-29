@@ -90,6 +90,7 @@ public class LoginController extends BaseController {
         String password = super.getPara("password").trim();
         String remember = super.getPara("remember");
 
+
         //验证验证码是否正确
         if (KaptchaUtil.getKaptchaOnOff()) {
             String kaptcha = super.getPara("kaptcha").trim();
@@ -98,8 +99,9 @@ public class LoginController extends BaseController {
                 throw new InvalidKaptchaException();
             }
         }
-
+        //通常我们会将Subject对象理解为一个用户，同样的它也有可能是一个三方程序，它是一个抽象的概念，可以理解为任何与系统交互的“东西”都是Subject。
         Subject currentUser = ShiroKit.getSubject();
+        //收集实体/凭据信息
         UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());
 
         if ("on".equals(remember)) {
@@ -107,8 +109,8 @@ public class LoginController extends BaseController {
         } else {
             token.setRememberMe(false);
         }
-
-        currentUser.login(token);
+        //进行实体认证
+       currentUser.login(token );
 
         ShiroUser shiroUser = ShiroKit.getUser();
         super.getSession().setAttribute("shiroUser", shiroUser);

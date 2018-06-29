@@ -38,7 +38,7 @@ public class LogAop {
     public void cutService() {
     }
 
-    @Around("cutService()")
+    @Around("cutService()")//围绕着方法执行
     public Object recordSysLog(ProceedingJoinPoint point) throws Throwable {
 
         //先执行业务

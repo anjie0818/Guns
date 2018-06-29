@@ -1,9 +1,11 @@
 package com.stylefeng.guns.shiro;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.util.Base64Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class Base64Test {
 
@@ -13,7 +15,7 @@ public class Base64Test {
     public static void main(String[] args) {
     	
         String keyStr = "guns";
-        
+
         byte[] keys;
 		try {
 			keys = keyStr.getBytes("UTF-8");

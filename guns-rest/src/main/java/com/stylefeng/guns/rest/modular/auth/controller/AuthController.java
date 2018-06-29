@@ -20,6 +20,7 @@ import javax.annotation.Resource;
  * @Date 2017/8/24 14:22
  */
 @RestController
+//@RestController注解相当于@ResponseBody ＋ @Controller
 public class AuthController {
 
     @Autowired

@@ -8,6 +8,7 @@
     <name>guns-parent</name>
     <packaging>pom</packaging>
     <!--子模块-->
+    <!--方便项目打包、部署、分析打包顺序-->
     <modules>
         <module>../guns-admin</module>
         <module>../guns-core</module>
@@ -45,7 +46,13 @@
         <flowable.version>6.2.0</flowable.version>
         <hutool.version>4.0.0</hutool.version>
     </properties>
-
+<!--管理依赖在父项目的POM文件中，我们会使用到dependencyManagement元素。通过它来管理jar包的版本，让子项目中引用一个依赖而不用显
+示的列出版本号。Maven会沿着父子层次向上走，直到找到一个拥有dependencyManagement元素的项目，然后它就会使用在dependencyManagement
+元素中指定的版本号。；-->
+    <!--dependencyManagementVsdependencies:
+    1>dependencies在子项目中不写改依赖仍然会从父项目继承
+    2>dependencyManagement里只是声明依赖，并不实现引入，因此子项目需要显示的声明需要用的依赖
+    -->
     <dependencyManagement>
         <dependencies>
             <dependency>

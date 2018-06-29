@@ -62,6 +62,115 @@
               字典的介绍
               修改需要将原字段保存起来
         原理:AOP,通过LogAop类
+七：swagger
+八：项目拆分
+    Guns-parent maven父工程,管理依赖
+    Guns-core guns核心包
+    Guns-admin guns后台管理系统
+    Guns-rest guns rest api服务   :Guns v3.0新增rest api服务,提供对接服务端接口的支持,
+                                    并利用jwt token鉴权机制给予客户端的访问权限,
+                                    传输数据进行md5签名保证传输过程数据的安全性!
+    按业务拆分成不同模块,不要按功能--优点分布式，易于拓展，不同项目跑到不同服务器上
+    提出maven父项目,管理依赖和模块
+    子项目通过继承父项目导入依赖
+    利用core项目封装多个项目共同的依赖和共同的类，在别的项目中只需要引入core,core中的依赖会自动注入当前项目
+    子项目通过引入core进而导入core的传递依赖
+九：shiro与权限系统
+    1、guns:用户、角色、资源（菜单）
+    2、shiro：安全框架
+    3、使用shiro：
+        1>配置maven依赖；（排除冲突：使用maven工具的show dependencies）
+        2>配置shiro;--XSS攻击？
+        3>编写shiro realm
+        4>权限坚持AOP
+        5>常用工具类
+        eg:用户认证过程
+                          收集实体/凭据信息（controller）
+                          UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());
+                          token.setRememberMe(true);
+
+                          提交实体/凭据信息(controller)
+                          Subject currentUser = SecurityUtils.getSubject();
+                          currentUser.login(token);
+
+                          认证（自定义Realm：ShiroDbRealm.doGetAuthorizationInfo()）
+
+                          认证处理
+                          通过：无异常
+                                此时在任意地方调用：SecurityUtils.getSubject()都可以获取到当前认证通过的用户实例
+                                subject.isAuthenticated()判断用户是否已验证都将返回true
+                          未通过：抛出异常(异常分类为shiro中的异常)
+           权限管理
+                          1、ShiroDbRealm中重写doGetAuthorizationInfo方法
+                                将用户的角色名称、权限集合通知给shiro
+                          2、自定义权限AOP--校验权限：1>校验权限功能 2>校验角色
+           为用户添加权限控制：
+                          通过管理系统,增加权限(资源),为角色赋予相应权限,为用户添加相应角色
+                          Controller增加@Permission注解
+                          前端页面如需通过权限控制是否显示,则用hasPermission判断
+十：全局异常
+        全局异常拦截器可以做什么? 拦截程序运行中的已知和未知异常
+        为什么要配置全局异常拦截器? 增加程序的健壮性
+        如何实现? @ControllerAdvice注解
+十一：代码生成器
+十二：数据范围的使用和原理
+        1、数据范围
+           Guns的数据范围控制是指,对拥有相同角色的用户,根据部门(可选)的不同进行相应的数据筛选,如果部门不相同,那么有可能展示出的具体数据是不一致的.
+           例如：两个相同角色的用户登录管理系统,A用户所在部门为总部,B用户为分部,则A用户看到的数据要比B用户多
+        2、原理
+           拦截sql语句，吧sql包一层语句，使用where语句筛选数据范围
+        3、使用方法：
+            git
+
+十三：缓存讲解
+        1、缓存的作用? 可以存储经常用到的信息,这样每次需要的时候,这些信息都是立即可用的.
+        2、Spring的缓存介绍:
+           Spring缓存是对缓存实现的抽象,利用spring缓存可以方便的用一套代码切换不同的缓存实现
+            eg:EhCache缓存、Redis缓存、ConcurrentMapCacheManager
+        3、常用缓存的配置:
+          1.EhCache缓存的配置
+
+          2. Redis缓存的配置
+         4、Spring 提供了4个注解来声明缓存规则:
+           1.@Cacheable表明在调用方法之前,首先应该在缓存中查找方法的返回值,如果这个值能够找到,则会返回缓存的值,否则执行该方法,并将返回值放到缓存中(select)
+           2.@,CachePut表明在方法调用前不会检查缓存方法始终都会被调用,调用之后把结果放到缓存中(save)--可以让@Cacheaable的方法使用
+           3.@CacheEvict表明spring会清除一个或者多个缓存(update或delete)
+           4.@Caching分组的注解,可以同时应用多个其他缓存注解,可以相同类型或者不同类型
+        5
+        @Cacheable, @Cacheput
+        参数介绍:
+        Value 缓存名称
+        Key 缓存的key值
+        Condition SpEL表达式,如果得出的值是false,不会将缓存应用到方法调用上
+        Unless SpEL表达式,如果得到的值是true,返回值不会放到缓存中
+        Condition是调用前检查, Unless 是调用后对结果的检查
+        6
+        @CacheEvict
+        参数介绍:
+        Value 缓存名称
+        Key 缓存的key值
+        Condition SpEL表达式,如果得出的值是false,不会将缓存应用到方法调用上
+        allEntries如果为true,特定缓存的所有条目都会被移除
+        beforeInvocation如果为true,在方法调用之前移除条目,如果为false,在方法成功之后再移除
+        7
+        常用spel表达式
+        #root.args 传递给缓存方法的参数,数组  #root.args[0] #root.args[1]
+        #root.caches 该方法执行后所对应的缓存,数组  #caches[0]  #caches[1]
+        #root.target 目标对象
+        #root.targetClass 目标对象的类
+        #root.method 缓存方法,对象
+        #root.methodName 缓存方法名
+        #result 方法调用的返回值,例如#result.id
+        #(Argument)任意的方法参数名或参数索引,例如#name,#deptId,#menuId,#a0,#a1 ...
+
+
+
+
+
+十四：分页讲解
+十五：事务讲解
+
+
 
 
 

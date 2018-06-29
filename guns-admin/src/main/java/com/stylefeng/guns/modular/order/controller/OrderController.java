@@ -1,6 +1,11 @@
 package com.stylefeng.guns.modular.order.controller;
 
 import com.stylefeng.guns.core.base.controller.BaseController;
+import com.stylefeng.guns.core.common.annotion.BussinessLog;
+import com.stylefeng.guns.core.common.annotion.Permission;
+import com.stylefeng.guns.core.common.constant.Const;
+import com.stylefeng.guns.core.common.constant.dictmap.OrderDict;
+import com.stylefeng.guns.core.common.constant.dictmap.UserDict;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -75,6 +80,7 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
+    @BussinessLog(value = "添加订单", key = "goodsName", dict = OrderDict.class)
     public Object add(Order order) {
         orderService.insert(order);
         return SUCCESS_TIP;
@@ -95,6 +101,7 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/update")
     @ResponseBody
+    @BussinessLog(value = "修改订单", key = "goodsName", dict = OrderDict.class)
     public Object update(Order order) {
         orderService.updateById(order);
         return SUCCESS_TIP;

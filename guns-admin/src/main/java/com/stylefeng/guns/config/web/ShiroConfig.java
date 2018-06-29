@@ -36,12 +36,13 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
-
     /**
      * 安全管理器
      */
+    //此方法的参数中的bean，会在此方法返回对象之前注入spring 容器，让此方法使用
     @Bean
-    public DefaultWebSecurityManager securityManager(CookieRememberMeManager rememberMeManager, CacheManager cacheShiroManager, SessionManager sessionManager) {
+    public DefaultWebSecurityManager securityManager(CookieRememberMeManager rememberMeManager,
+                                                     CacheManager cacheShiroManager, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(this.shiroDbRealm());
         securityManager.setCacheManager(cacheShiroManager);
@@ -102,6 +103,7 @@ public class ShiroConfig {
     @Bean
     public CookieRememberMeManager rememberMeManager(SimpleCookie rememberMeCookie) {
         CookieRememberMeManager manager = new CookieRememberMeManager();
+        //对cookie进行加密
         manager.setCipherKey(Base64.decode("Z3VucwAAAAAAAAAAAAAAAA=="));
         manager.setCookie(rememberMeCookie);
         return manager;
@@ -113,7 +115,7 @@ public class ShiroConfig {
     @Bean
     public SimpleCookie rememberMeCookie() {
         SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-        simpleCookie.setHttpOnly(true);
+        simpleCookie.setHttpOnly(true);//防止xss攻击
         simpleCookie.setMaxAge(7 * 24 * 60 * 60);//7天
         return simpleCookie;
     }
@@ -180,8 +182,9 @@ public class ShiroConfig {
 
     /**
      * Shiro生命周期处理器:
-     * 用于在实现了Initializable接口的Shiro bean初始化时调用Initializable接口回调(例如:UserRealm)
+     * 用于在实现了Initializable接口的Shiro bean初始化时调用Initializable接口回调(例如:ShiroDbRealm)
      * 在实现了Destroyable接口的Shiro bean销毁时调用 Destroyable接口回调(例如:DefaultSecurityManager)
+     * 所有实现init...和dest...接口的类都会执行
      */
     @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -189,7 +192,7 @@ public class ShiroConfig {
     }
 
     /**
-     * 启用shrio授权注解拦截方式，AOP式方法级权限检查
+     * 启用shrio授权注解拦截方式，AOP式方法级权限检查--shiro自带AOP
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {

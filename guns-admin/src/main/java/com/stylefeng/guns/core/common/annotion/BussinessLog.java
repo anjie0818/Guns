@@ -11,9 +11,9 @@ import java.lang.annotation.*;
  * @author fengshuonan
  * @date 2017-03-31 12:46
  */
-@Inherited
+@Inherited  //允许子类继承父类的注解
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD})//注解的使用范围
 public @interface BussinessLog {
 
     /**
