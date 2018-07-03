@@ -51,6 +51,21 @@
 		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
 			and (createTime between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
 		</if>
+		<choose>
+			<when test="orderByField != null and orderByField !=''">
+				<choose>
+					<when test="isAsc == true">
+						order by ${orderByField} ASC
+					</when>
+					<otherwise>
+						order by ${orderByField} DESC
+					</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				order by createtime DESC
+			</otherwise>
+		</choose>
 	</select>
 
 	<update id="setStatus">

@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.system.controller;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.config.properties.GunsProperties;
 import com.stylefeng.guns.core.base.controller.BaseController;
 import com.stylefeng.guns.core.base.tips.Tip;
@@ -8,6 +9,7 @@ import com.stylefeng.guns.core.common.annotion.Permission;
 import com.stylefeng.guns.core.common.constant.Const;
 import com.stylefeng.guns.core.common.constant.dictmap.UserDict;
 import com.stylefeng.guns.core.common.constant.factory.ConstantFactory;
+import com.stylefeng.guns.core.common.constant.factory.PageFactory;
 import com.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import com.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.core.datascope.DataScope;
@@ -19,9 +21,11 @@ import com.stylefeng.guns.core.shiro.ShiroUser;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.system.dao.UserMapper;
 import com.stylefeng.guns.modular.system.factory.UserFactory;
+import com.stylefeng.guns.modular.system.model.OperationLog;
 import com.stylefeng.guns.modular.system.model.User;
 import com.stylefeng.guns.modular.system.service.IUserService;
 import com.stylefeng.guns.modular.system.transfer.UserDto;
+import com.stylefeng.guns.modular.system.warpper.LogWarpper;
 import com.stylefeng.guns.modular.system.warpper.UserWarpper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,19 +160,24 @@ public class UserMgrController extends BaseController {
 
     /**
      * 查询管理员列表
+     * @RequestParam(required = false):设置请求参数为非必传
      */
     @RequestMapping("/list")
     @Permission
     @ResponseBody
     public Object list(@RequestParam(required = false) String name, @RequestParam(required = false) String beginTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) Integer deptid) {
+        Page<User> page = new PageFactory<User>().defaultPage();
+        List<User> lists=null;
         if (ShiroKit.isAdmin()) {
-            List<Map<String, Object>> users = userService.selectUsers(null, name, beginTime, endTime, deptid);
-            return new UserWarpper(users).warp();
+            List<Map<String, Object>> users = userService.selectUsers(page,null, name, beginTime, endTime, deptid,page.getOrderByField(),page.isAsc());
+            lists= (List<User>) new UserWarpper(users).warp();
         } else {
             DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
-            List<Map<String, Object>> users = userService.selectUsers(dataScope, name, beginTime, endTime, deptid);
-            return new UserWarpper(users).warp();
+            List<Map<String, Object>> users = userService.selectUsers(page,dataScope, name, beginTime, endTime, deptid,page.getOrderByField(),page.isAsc());
+            lists= (List<User>) new UserWarpper(users).warp();
         }
+        page.setRecords(lists);
+        return super.packForBT(page);
     }
 
     /**

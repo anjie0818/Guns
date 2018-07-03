@@ -1,7 +1,9 @@
 package com.stylefeng.guns.modular.system.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.core.datascope.DataScope;
+import com.stylefeng.guns.modular.system.model.OperationLog;
 import com.stylefeng.guns.modular.system.model.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,7 +33,7 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 根据条件查询用户列表
      */
-    List<Map<String, Object>> selectUsers(@Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptid") Integer deptid);
+    List<Map<String, Object>> selectUsers(@Param("page") Page<User> page, @Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptid") Integer deptid,@Param("orderByField")String orderByField, @Param("isAsc")boolean isAsc);
 
     /**
      * 设置用户的角色

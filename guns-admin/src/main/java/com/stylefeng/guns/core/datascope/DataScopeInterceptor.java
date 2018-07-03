@@ -48,6 +48,7 @@ public class DataScopeInterceptor implements Interceptor {
             String scopeName = dataScope.getScopeName();
             List<Integer> deptIds = dataScope.getDeptIds();
             String join = CollectionKit.join(deptIds, ",");
+            //封装语句select * 查询结果还是originalSql查询返回的结果
             originalSql = "select * from (" + originalSql + ") temp_data_scope where temp_data_scope." + scopeName + " in (" + join + ")";
             metaStatementHandler.setValue("delegate.boundSql.sql", originalSql);
             return invocation.proceed();
@@ -69,12 +70,16 @@ public class DataScopeInterceptor implements Interceptor {
         }
         return null;
     }
-
+    /*
+    plugin方法是拦截器用于封装目标对象的
+     */
     @Override
     public Object plugin(Object target) {
         return Plugin.wrap(target, this);
     }
-
+    /*
+    setProperties方法是用于在Mybatis配置文件中指定一些属性的。
+     */
     @Override
     public void setProperties(Properties properties) {
 

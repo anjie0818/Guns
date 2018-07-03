@@ -62,6 +62,7 @@ public class LogController extends BaseController {
      * 查询操作日志详情
      */
     @RequestMapping("/detail/{id}")
+
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
     public Object detail(@PathVariable Integer id) {

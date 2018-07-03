@@ -1,7 +1,9 @@
 package com.stylefeng.guns.modular.system.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import com.stylefeng.guns.core.datascope.DataScope;
+import com.stylefeng.guns.modular.system.model.OperationLog;
 import com.stylefeng.guns.modular.system.model.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,7 +33,7 @@ public interface IUserService extends IService<User> {
     /**
      * 根据条件查询用户列表
      */
-    List<Map<String, Object>> selectUsers(@Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptid") Integer deptid);
+    List<Map<String, Object>> selectUsers(Page<User> page, @Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptid") Integer deptid,String orderByField, boolean asc);
 
     /**
      * 设置用户的角色
